@@ -1,5 +1,5 @@
 {
-  "name": "kulonga - Sistema de Gestão Escolar SaaS",
-  "description": "Plataforma de gestão escolar multi-tenant com suporte a subdomínios, gestão de alunos, professores e notas.",
+  "name": "kulonga",
+  "description": "Plataforma de gestão escolar multi-tenant com suporte a subdomínios, gestão de alunos, professores e notas.\nSistema de Gestão Escolar SaaS",
   "requestFramePermissions": []
 }

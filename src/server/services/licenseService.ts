@@ -1,10 +1,13 @@
 import express from "express";
 import db from "../db.ts";
+import { authenticate, authorize } from "../utils/authMiddleware.ts";
 
 const router = express.Router();
 
+router.use(authenticate);
+
 // Get license status for the current school
-router.get("/status", (req, res) => {
+router.get("/status", authorize(['admin', 'superadmin']), (req, res) => {
   const schoolId = (req as any).school?.id;
   if (!schoolId) return res.status(400).json({ error: "Escola não identificada" });
 

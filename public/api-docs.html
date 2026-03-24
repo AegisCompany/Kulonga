@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulonga API - Documentação Técnica</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; scroll-behavior: smooth; }
+        code { font-family: 'JetBrains Mono', monospace; }
+        .endpoint-card:hover { border-color: #4f46e5; }
+        .method-get { background: #ecfdf5; color: #059669; }
+        .method-post { background: #eff6ff; color: #2563eb; }
+        .method-delete { background: #fef2f2; color: #dc2626; }
+        .method-put { background: #fff7ed; color: #ea580c; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2">
+            <div class="bg-indigo-600 p-1.5 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
+            <span class="text-xl font-black tracking-tighter text-slate-900">KULONGA <span class="text-indigo-600">API</span></span>
+        </div>
+        <div class="flex items-center gap-4">
+            <a href="/docs.html" class="text-sm font-bold text-slate-500 hover:text-indigo-600 transition-colors">Docs</a>
+            <a href="/" class="bg-indigo-600 text-white px-4 py-2 rounded-xl text-sm font-bold hover:bg-indigo-700 transition-all">Sair</a>
+        </div>
+    </nav>
+
+    <div class="flex min-h-screen">
+        <!-- Sidebar Navigation -->
+        <aside class="hidden lg:block w-64 bg-white border-r border-slate-200 p-6 sticky top-20 h-[calc(100vh-80px)] overflow-y-auto">
+            <div class="space-y-8">
+                <div>
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Introdução</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#auth" class="text-slate-600 hover:text-indigo-600 font-medium">Autenticação</a></li>
+                        <li><a href="#webhooks" class="text-slate-600 hover:text-indigo-600 font-medium">Webhooks</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Categorias</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#cat-auth" class="text-slate-600 hover:text-indigo-600 font-medium">1. Autenticação e Segurança</a></li>
+                        <li><a href="#cat-academic" class="text-slate-600 hover:text-indigo-600 font-medium">2. Gestão Académica</a></li>
+                        <li><a href="#cat-teachers" class="text-slate-600 hover:text-indigo-600 font-medium">3. Gestão de Professores</a></li>
+                        <li><a href="#cat-financial" class="text-slate-600 hover:text-indigo-600 font-medium">4. Financeiro e Pagamentos</a></li>
+                        <li><a href="#cat-certification" class="text-slate-600 hover:text-indigo-600 font-medium">5. Certificação e Documentos</a></li>
+                        <li><a href="#cat-notifications" class="text-slate-600 hover:text-indigo-600 font-medium">6. Notificações</a></li>
+                    </ul>
+                </div>
+                <div>
+                    <h3 class="text-[10px] font-bold text-slate-400 uppercase tracking-widest mb-4">Ferramentas</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="#playground" class="text-indigo-600 hover:text-indigo-800 font-bold">API Playground</a></li>
+                    </ul>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-6 lg:p-12 max-w-5xl">
+            <header class="mb-16">
+                <h1 class="text-5xl font-black mb-6 tracking-tight">API Reference</h1>
+                <p class="text-slate-500 text-xl max-w-2xl leading-relaxed">
+                    Documentação oficial para integração com o ecossistema Kulonga. Siga os padrões RESTful para interagir com dados escolares de forma segura.
+                </p>
+            </header>
+
+            <!-- Autenticação Geral -->
+            <section id="auth" class="mb-20 scroll-mt-24">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="bg-indigo-100 p-3 rounded-2xl text-indigo-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
+                    <h2 class="text-3xl font-bold">Autenticação e Segurança</h2>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm space-y-6">
+                    <p class="text-slate-600">O Kulonga utiliza autenticação baseada em **API Keys** para sistemas externos e **JWT Tokens** para aplicações de utilizador. Todas as requisições externas devem incluir o cabeçalho <code class="bg-slate-100 px-2 py-1 rounded text-indigo-600">X-API-KEY</code>.</p>
+                    
+                    <div class="space-y-4">
+                        <h4 class="font-bold text-sm text-slate-400 uppercase">Exemplo de Requisição (cURL)</h4>
+                        <div class="bg-slate-900 p-6 rounded-2xl text-indigo-300 text-sm overflow-x-auto">
+                            <code>curl -X GET https://api.kulonga.com/api/academic/students \<br>
+                            &nbsp;&nbsp;-H "X-API-KEY: KUL-VOSSA-CHAVE-AQUI"</code>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 1. Autenticação e Segurança -->
+            <section id="cat-auth" class="mb-20 scroll-mt-24">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-indigo-600 rounded-full"></span>
+                    1. Autenticação e Segurança (/api/auth)
+                </h3>
+                <p class="text-slate-500 mb-8">Essenciais para permitir que outros sistemas validem utilizadores do Kulonga.</p>
+                <div class="grid gap-4">
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                                <code class="font-bold text-slate-700">/api/auth/login</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Autenticação de utilizadores e geração de tokens JWT.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/auth/me</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Obter detalhes do perfil do utilizador autenticado.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/auth/oauth/google</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Iniciar fluxo de autenticação via Google.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                                <code class="font-bold text-slate-700">/api/auth/mfa/setup</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Configuração de autenticação de dois fatores.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Gestão Académica -->
+            <section id="cat-academic" class="mb-20 scroll-mt-24">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-emerald-600 rounded-full"></span>
+                    2. Gestão Académica (/api/academic)
+                </h3>
+                <p class="text-slate-500 mb-8">Permite a sincronização de dados escolares com outras plataformas de ensino.</p>
+                <div class="grid gap-4">
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/academic/students</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Listar todos os alunos da instituição (com filtros por turma).</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                                <code class="font-bold text-slate-700">/api/academic/students</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Matricular novos alunos via sistema externo.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/academic/subjects</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Listar disciplinas e currículos.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/academic/grades</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Consultar notas e aproveitamento escolar.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                                <code class="font-bold text-slate-700">/api/academic/grades</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Lançamento de notas (útil para integração com apps de professores).</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/academic/schedules</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Consultar horários de aulas e exames.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Gestão de Professores -->
+            <section id="cat-teachers" class="mb-20 scroll-mt-24">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-blue-600 rounded-full"></span>
+                    3. Gestão de Professores (/api/teachers)
+                </h3>
+                <p class="text-slate-500 mb-8">Para sistemas de RH ou gestão de equipas.</p>
+                <div class="grid gap-4">
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/teachers/</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Listar corpo docente e suas especializações.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                                <code class="font-bold text-slate-700">/api/teachers/vacations</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Solicitação de férias ou ausências.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/teachers/vacations</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Consultar estado de pedidos de ausência.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 4. Financeiro e Pagamentos -->
+            <section id="cat-financial" class="mb-20 scroll-mt-24">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-amber-600 rounded-full"></span>
+                    4. Financeiro e Pagamentos (/api/financial)
+                </h3>
+                <p class="text-slate-500 mb-8">Crucial para integração com bancos, caixas ou sistemas de faturação.</p>
+                <div class="grid gap-4">
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/financial/invoices</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Listar faturas e estados de pagamento (propinas, taxas).</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/financial/summary</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Obter resumo financeiro (total pago vs pendente).</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                                <code class="font-bold text-slate-700">/api/financial/payments/callback</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Endpoint para receber confirmações de pagamento de gateways externas (ex: EMIS/Multicaixa).</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 5. Certificação e Documentos -->
+            <section id="cat-certification" class="mb-20 scroll-mt-24">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-rose-600 rounded-full"></span>
+                    5. Certificação e Documentos (/api/certification)
+                </h3>
+                <p class="text-slate-500 mb-8">Para validação de documentos oficiais.</p>
+                <div class="grid gap-4">
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/certification/verify/:code</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Validar a autenticidade de um certificado ou declaração via código QR.</p>
+                    </div>
+                    <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                        <div class="flex items-center justify-between mb-2">
+                            <div class="flex items-center gap-3">
+                                <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase">GET</span>
+                                <code class="font-bold text-slate-700">/api/certification/templates</code>
+                            </div>
+                        </div>
+                        <p class="text-sm text-slate-500">Listar modelos de documentos disponíveis.</p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 6. Notificações -->
+            <section id="cat-notifications" class="mb-20 scroll-mt-24">
+                <h3 class="text-2xl font-bold mb-6 flex items-center gap-2">
+                    <span class="w-2 h-8 bg-purple-600 rounded-full"></span>
+                    6. Notificações (/api/notifications)
+                </h3>
+                <p class="text-slate-500 mb-8">Para envio de alertas multicanal.</p>
+                <div class="endpoint-card bg-white p-6 rounded-3xl border border-slate-100 shadow-sm transition-all">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-3">
+                            <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase">POST</span>
+                            <code class="font-bold text-slate-700">/api/notifications/send</code>
+                        </div>
+                    </div>
+                    <p class="text-sm text-slate-500">Enviar notificações push ou SMS para encarregados de educação e alunos.</p>
+                </div>
+            </section>
+
+            <!-- Webhooks -->
+            <section id="webhooks" class="mb-20 scroll-mt-24">
+                <div class="flex items-center gap-3 mb-8">
+                    <div class="bg-amber-100 p-3 rounded-2xl text-amber-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+                    </div>
+                    <h2 class="text-3xl font-bold">Webhooks</h2>
+                </div>
+                <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm space-y-6">
+                    <p class="text-slate-600">Receba notificações em tempo real sobre eventos na sua instituição.</p>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <span class="method-post px-2 py-1 rounded-full text-[10px] font-bold uppercase mb-2 inline-block">POST</span>
+                            <code class="block font-bold text-sm mb-1">/api/external/webhooks</code>
+                            <p class="text-xs text-slate-500">Registar um novo endpoint de webhook.</p>
+                        </div>
+                        <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100">
+                            <span class="method-get px-2 py-1 rounded-full text-[10px] font-bold uppercase mb-2 inline-block">GET</span>
+                            <code class="block font-bold text-sm mb-1">/api/external/webhooks</code>
+                            <p class="text-xs text-slate-500">Listar webhooks ativos.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- API Playground -->
+            <section id="playground" class="mt-32 scroll-mt-24">
+                <div class="bg-slate-900 rounded-[40px] p-10 shadow-2xl overflow-hidden relative">
+                    <div class="absolute top-0 right-0 p-10 opacity-10">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
+                    </div>
+                    
+                    <h2 class="text-3xl font-bold text-white mb-8">API Playground</h2>
+                    
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                        <div class="space-y-6">
+                            <div>
+                                <label class="block text-[10px] font-bold text-indigo-400 uppercase mb-2">API Key</label>
+                                <input id="pg-key" type="text" placeholder="KUL-..." class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white outline-none focus:ring-2 focus:ring-indigo-500">
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-32">
+                                    <label class="block text-[10px] font-bold text-indigo-400 uppercase mb-2">Método</label>
+                                    <select id="pg-method" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white outline-none">
+                                        <option value="GET">GET</option>
+                                        <option value="POST">POST</option>
+                                        <option value="DELETE">DELETE</option>
+                                    </select>
+                                </div>
+                                <div class="flex-1">
+                                    <label class="block text-[10px] font-bold text-indigo-400 uppercase mb-2">Endpoint</label>
+                                    <input id="pg-url" type="text" value="/api/academic/students" class="w-full bg-slate-800 border border-slate-700 rounded-xl px-4 py-3 text-white outline-none">
+                                </div>
+                            </div>
+                            <button onclick="runTest()" class="w-full bg-indigo-600 text-white py-4 rounded-xl font-bold hover:bg-indigo-700 transition-all shadow-lg shadow-indigo-900/20">Executar Requisição</button>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <label class="block text-[10px] font-bold text-indigo-400 uppercase">Resposta do Servidor</label>
+                            <div id="pg-response" class="bg-black/50 border border-slate-700 rounded-2xl p-6 h-[300px] overflow-y-auto text-indigo-300 text-xs font-mono">
+                                // Aguardando execução...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script>
+        function openPlayground(method, url) {
+            document.getElementById('pg-method').value = method;
+            document.getElementById('pg-url').value = url;
+            document.getElementById('playground').scrollIntoView();
+        }
+
+        async function runTest() {
+            const key = document.getElementById('pg-key').value;
+            const method = document.getElementById('pg-method').value;
+            const url = document.getElementById('pg-url').value;
+            const resBox = document.getElementById('pg-response');
+
+            if (!key) {
+                resBox.innerHTML = '<span class="text-red-400">// Erro: API Key é obrigatória para testar.</span>';
+                return;
+            }
+
+            resBox.innerHTML = '// Carregando...';
+
+            try {
+                const response = await fetch(url, {
+                    method: method,
+                    headers: {
+                        'x-api-key': key,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const data = await response.json();
+                resBox.innerHTML = JSON.stringify(data, null, 2);
+            } catch (err) {
+                resBox.innerHTML = '<span class="text-red-400">// Erro na requisição: ' + err.message + '</span>';
+            }
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulonga Community - Comunidade Kulonga</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-slate-50 text-slate-900">
+    <nav class="bg-white border-b border-slate-200 px-6 py-4 flex justify-between items-center sticky top-0 z-50">
+        <div class="flex items-center gap-2">
+            <div class="bg-[#11392e] p-1.5 rounded-lg">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            </div>
+            <span class="text-xl font-black tracking-tighter text-[#11392e]">KULONGA <span class="text-indigo-600">COMMUNITY</span></span>
+        </div>
+        <a href="/" class="text-sm font-bold text-indigo-600 hover:text-indigo-800 transition-colors">Voltar à Página Inicial</a>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-16">
+        <div class="text-center mb-16">
+            <h1 class="text-5xl font-black mb-4">Espaço de Interação</h1>
+            <p class="text-slate-500 text-lg">Fórum e partilha de experiências entre escolas, professores e alunos.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
+            <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
+                <h3 class="font-bold text-xl mb-4">Fórum de Professores</h3>
+                <p class="text-slate-500 text-sm mb-6">Partilha de boas práticas pedagógicas e materiais didáticos.</p>
+                <button class="text-indigo-600 font-bold text-sm">Aceder ao Fórum &rarr;</button>
+            </div>
+            <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
+                <h3 class="font-bold text-xl mb-4">Espaço Aluno</h3>
+                <p class="text-slate-500 text-sm mb-6">Dúvidas, grupos de estudo e interação entre estudantes de todo o país.</p>
+                <button class="text-indigo-600 font-bold text-sm">Entrar no Grupo &rarr;</button>
+            </div>
+            <div class="bg-white p-8 rounded-[40px] border border-slate-100 shadow-sm">
+                <h3 class="font-bold text-xl mb-4">Gestão Escolar</h3>
+                <p class="text-slate-500 text-sm mb-6">Discussões sobre administração, finanças e conformidade legal.</p>
+                <button class="text-indigo-600 font-bold text-sm">Ver Tópicos &rarr;</button>
+            </div>
+        </div>
+
+        <div class="bg-indigo-50 p-12 rounded-[50px] border border-indigo-100 flex flex-col md:flex-row items-center gap-12">
+            <div class="flex-1">
+                <h2 class="text-3xl font-black text-indigo-900 mb-4">Partilhe sua Experiência</h2>
+                <p class="text-indigo-700 mb-6">O Kulonga cresce com o feedback da nossa comunidade. Participe dos nossos webinars mensais de co-criação.</p>
+                <button class="bg-indigo-600 text-white px-8 py-4 rounded-2xl font-bold hover:bg-indigo-700 transition-all">Inscrever-se no Próximo Webinar</button>
+            </div>
+            <div class="flex-1">
+                <img src="https://picsum.photos/seed/community/500/300" alt="Community" class="rounded-3xl shadow-lg" referrerPolicy="no-referrer">
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-slate-900 text-white py-12 px-6 mt-20">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div>
+                <h3 class="text-xl font-black mb-4">KULONGA</h3>
+                <p class="text-slate-400 text-sm">Transformando a educação através da tecnologia e inovação em parceria com a Aegis.</p>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Links Rápidos</h4>
+                <ul class="space-y-2 text-sm text-slate-400">
+                    <li><a href="/docs.html" class="hover:text-white transition-colors">Documentação</a></li>
+                    <li><a href="/support.html" class="hover:text-white transition-colors">Suporte</a></li>
+                    <li><a href="/academy.html" class="hover:text-white transition-colors">Academy</a></li>
+                    <li><a href="/community.html" class="hover:text-white transition-colors">Comunidade</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="font-bold mb-4">Redes Sociais</h4>
+                <div class="flex gap-4">
+                    <a href="#" class="bg-slate-800 px-3 py-2 rounded-lg hover:bg-indigo-600 transition-all text-xs font-bold">Facebook</a>
+                    <a href="#" class="bg-slate-800 px-3 py-2 rounded-lg hover:bg-indigo-600 transition-all text-xs font-bold">Instagram</a>
+                    <a href="#" class="bg-slate-800 px-3 py-2 rounded-lg hover:bg-indigo-600 transition-all text-xs font-bold">LinkedIn</a>
+                </div>
+            </div>
+        </div>
+        <div class="max-w-6xl mx-auto border-t border-slate-800 mt-12 pt-8 text-center text-slate-500 text-xs">
+            &copy; 2026 Kulonga & Aegis. Todos os direitos reservados.
+        </div>
+    </footer>
+    <!-- Floating Action Buttons -->
+    <div class="fixed bottom-6 right-6 z-[100] flex flex-col gap-4">
+        <a href="https://wa.me/244923000000" target="_blank" rel="noopener noreferrer" class="bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center group relative" title="Conversar no WhatsApp">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/><path d="M8 12h.01"/><path d="M12 12h.01"/><path d="M16 12h.01"/></svg>
+        </a>
+        <button onclick="alert('Assistente Virtual Kulonga em breve!')" class="bg-indigo-600 text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform flex items-center justify-center group relative" title="Assistente Virtual">
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect width="16" height="12" x="4" y="8" rx="2"/><path d="M2 14h2"/><path d="M20 14h2"/><path d="M15 13v2"/><path d="M9 13v2"/></svg>
+        </button>
+    </div>
+</body>
+</html>

@@ -3,13 +3,6 @@ import bcrypt from "bcryptjs";
 
 const db = new Database("school.db");
 
-try {
-  db.prepare("SELECT 1").get();
-  console.log("[Database] Connection successful");
-} catch (err) {
-  console.error("[Database] Connection failed:", err);
-}
-
 // Initialize Database with all service tables
 db.exec(`
   CREATE TABLE IF NOT EXISTS schools (
@@ -54,6 +47,7 @@ db.exec(`
     mfa_enabled INTEGER DEFAULT 0,
     failed_login_attempts INTEGER DEFAULT 0,
     lockout_until DATETIME,
+    temp_password_expiry DATETIME,
     google_id TEXT,
     password_updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(school_id) REFERENCES schools(id)
@@ -77,7 +71,13 @@ db.exec(`
     school_id INTEGER,
     name TEXT NOT NULL,
     grade_level TEXT,
-    FOREIGN KEY(school_id) REFERENCES schools(id)
+    teacher_id INTEGER, -- Class Director
+    pedagogical_id INTEGER,
+    director_id INTEGER,
+    FOREIGN KEY(school_id) REFERENCES schools(id),
+    FOREIGN KEY(teacher_id) REFERENCES users(id),
+    FOREIGN KEY(pedagogical_id) REFERENCES users(id),
+    FOREIGN KEY(director_id) REFERENCES users(id)
   );
 
   -- Class Management Service Tables
@@ -161,9 +161,11 @@ db.exec(`
   CREATE TABLE IF NOT EXISTS subjects (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     school_id INTEGER,
+    classe_id INTEGER,
     name TEXT NOT NULL,
     code TEXT,
-    FOREIGN KEY(school_id) REFERENCES schools(id)
+    FOREIGN KEY(school_id) REFERENCES schools(id),
+    FOREIGN KEY(classe_id) REFERENCES classes(id)
   );
 
   CREATE TABLE IF NOT EXISTS teachers (
@@ -172,20 +174,25 @@ db.exec(`
     school_id INTEGER,
     specialization TEXT,
     hire_date DATE,
+    phone TEXT,
+    bi TEXT,
     FOREIGN KEY(user_id) REFERENCES users(id),
     FOREIGN KEY(school_id) REFERENCES schools(id)
   );
 
-  CREATE TABLE IF NOT EXISTS vacations (
+  CREATE TABLE IF NOT EXISTS licenses (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
     school_id INTEGER,
     start_date DATE NOT NULL,
     end_date DATE NOT NULL,
-    type TEXT CHECK(type IN ('Férias', 'Licença Médica', 'Outro')) DEFAULT 'Férias',
+    type TEXT CHECK(type IN ('Férias', 'Licença Médica', 'Maternidade', 'Outro')) DEFAULT 'Licença Médica',
     status TEXT CHECK(status IN ('Pendente', 'Aprovado', 'Rejeitado')) DEFAULT 'Pendente',
+    requested_by_role TEXT,
+    approved_by INTEGER,
     FOREIGN KEY(user_id) REFERENCES users(id),
-    FOREIGN KEY(school_id) REFERENCES schools(id)
+    FOREIGN KEY(school_id) REFERENCES schools(id),
+    FOREIGN KEY(approved_by) REFERENCES users(id)
   );
 
   CREATE TABLE IF NOT EXISTS user_schools (
@@ -307,7 +314,20 @@ db.exec(`
 `);
 
 // Migrations for schools table
-try { db.exec("ALTER TABLE invoices ADD COLUMN invoice_no TEXT;"); } catch(e) {}
+try { db.exec("ALTER TABLE classes ADD COLUMN teacher_id INTEGER;"); } catch(e) {}
+try { db.exec("ALTER TABLE classes ADD COLUMN pedagogical_id INTEGER;"); } catch(e) {}
+try { db.exec("ALTER TABLE classes ADD COLUMN director_id INTEGER;"); } catch(e) {}
+try { db.exec("ALTER TABLE subjects ADD COLUMN classe_id INTEGER;"); } catch(e) {}
+try { db.exec("ALTER TABLE teachers ADD COLUMN phone TEXT;"); } catch(e) {}
+try { db.exec("ALTER TABLE teachers ADD COLUMN bi TEXT;"); } catch(e) {}
+try { db.exec("ALTER TABLE notifications ADD COLUMN method TEXT DEFAULT 'system';"); } catch(e) {}
+
+// Rename vacations to licenses if it exists
+try {
+  db.exec("ALTER TABLE vacations RENAME TO licenses;");
+} catch(e) {}
+try { db.exec("ALTER TABLE licenses ADD COLUMN requested_by_role TEXT;"); } catch(e) {}
+try { db.exec("ALTER TABLE licenses ADD COLUMN approved_by INTEGER;"); } catch(e) {}
 try { db.exec("ALTER TABLE invoices ADD COLUMN invoice_date DATE;"); } catch(e) {}
 try { db.exec("ALTER TABLE invoices ADD COLUMN hash TEXT;"); } catch(e) {}
 try { db.exec("ALTER TABLE invoices ADD COLUMN total_tax DECIMAL(10,2) DEFAULT 0;"); } catch(e) {}
@@ -375,11 +395,13 @@ if (schoolCount.count === 0) {
   insertSchool.run("Escola Primária Central", "central", "https://picsum.photos/seed/school1/200/200", "Rua Principal, Luanda", "+244 923 000 001", "contato@central.edu", "#4f46e5");
   insertSchool.run("Colégio Avançado", "avancado", "https://picsum.photos/seed/school2/200/200", "Av. Independência, Talatona", "+244 923 000 002", "info@avancado.edu", "#10b981");
   
-  const hashedPassword = bcrypt.hashSync("superpassword", 10);
+  const hashedPass1 = bcrypt.hashSync("1234567890", 10);
+  const hashedPass2 = bcrypt.hashSync("0987654321", 10);
   const defaultPassword = bcrypt.hashSync("password", 10);
 
   const insertUser = db.prepare("INSERT INTO users (school_id, name, email, password, role) VALUES (?, ?, ?, ?, ?)");
-  insertUser.run(null, "Kulonga Owner", "owner@kulonga.com", hashedPassword, "superadmin");
+  insertUser.run(null, "Benilson Salvador", "ownerb@kulonga.ao", hashedPass1, "superadmin");
+  insertUser.run(null, "Fernando Madruga", "ownerf@kulonga.ao", hashedPass2, "superadmin");
   insertUser.run(1, "Admin Central", "admin@central.edu", defaultPassword, "admin");
   insertUser.run(2, "Diretor Avançado", "diretor@avancado.edu", defaultPassword, "admin");
   insertUser.run(1, "Professor João", "joao@central.edu", defaultPassword, "teacher");

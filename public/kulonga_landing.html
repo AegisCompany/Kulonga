@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kulonga - De Angola para Angola</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes marquee {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-marquee {
+            display: flex;
+            width: fit-content;
+            animation: marquee 30s linear infinite;
+        }
+        .animate-marquee:hover {
+            animation-play-state: paused;
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        .carousel-item { display: none; opacity: 0; transition: opacity 1s ease-in-out; }
+        .carousel-item.active { display: block; opacity: 1; }
+    </style>
+</head>
+<body class="bg-white text-slate-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center gap-2">
+                    <div class="bg-[#11392e] p-2 rounded-lg">
+                        <i data-lucide="graduation-cap" class="text-white w-7 h-7"></i>
+                    </div>
+                    <span class="text-2xl font-black tracking-tighter text-[#11392e]">kulonga</span>
+                </div>
+                
+                <div class="hidden md:flex items-center gap-8">
+                    <button onclick="showTab('inicio')" class="nav-link text-sm font-bold uppercase tracking-wider transition-colors text-[#f97316]" data-tab="inicio">inicio</button>
+                    <button onclick="showTab('sobre')" class="nav-link text-sm font-bold uppercase tracking-wider transition-colors text-slate-600 hover:text-[#1e3a8a]" data-tab="sobre">sobre</button>
+                    <button onclick="showTab('licencas')" class="nav-link text-sm font-bold uppercase tracking-wider transition-colors text-slate-600 hover:text-[#1e3a8a]" data-tab="licencas">licencas</button>
+                    <button onclick="showTab('contactos')" class="nav-link text-sm font-bold uppercase tracking-wider transition-colors text-slate-600 hover:text-[#1e3a8a]" data-tab="contactos">contactos</button>
+                    <a href="/" class="bg-[#1e3a8a] text-white px-6 py-2.5 rounded-full font-bold text-sm hover:bg-[#11392e] transition-all shadow-lg shadow-blue-100">
+                        Entrar no Sistema
+                    </a>
+                </div>
+
+                <button id="mobile-menu-btn" class="md:hidden text-slate-600">
+                    <i data-lucide="layout-grid" class="w-6 h-6"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Overlay -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-slate-100 overflow-hidden">
+            <div class="flex flex-col p-4 gap-4">
+                <button onclick="showTab('inicio'); toggleMobileMenu()" class="text-sm font-bold uppercase tracking-wider text-left py-2 text-[#f97316]">inicio</button>
+                <button onclick="showTab('sobre'); toggleMobileMenu()" class="text-sm font-bold uppercase tracking-wider text-left py-2 text-slate-600">sobre</button>
+                <button onclick="showTab('licencas'); toggleMobileMenu()" class="text-sm font-bold uppercase tracking-wider text-left py-2 text-slate-600">licencas</button>
+                <button onclick="showTab('contactos'); toggleMobileMenu()" class="text-sm font-bold uppercase tracking-wider text-left py-2 text-slate-600">contactos</button>
+                <a href="/" class="bg-[#1e3a8a] text-white px-6 py-3 rounded-xl font-bold text-sm text-center">
+                    Entrar no Sistema
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- INICIO TAB -->
+    <div id="tab-inicio" class="tab-content active">
+        <!-- Hero / Carousel -->
+        <section class="relative h-[600px] overflow-hidden bg-[#11392e]">
+            <div id="carousel">
+                <!-- Slide 1 -->
+                <div class="carousel-item active absolute inset-0">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#11392e] via-[#11392e]/80 to-transparent z-10"></div>
+                    <img src="https://picsum.photos/seed/angola1/1200/600" alt="Banner" class="w-full h-full object-cover opacity-40">
+                    <div class="relative z-20 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
+                        <span class="text-[#f97316] font-black text-lg md:text-2xl mb-2">DE ANGOLA, PARA ANGOLA</span>
+                        <h1 class="text-white text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-tight">FEITO POR ANGOLANOS</h1>
+                        <p class="text-slate-300 text-lg md:text-xl max-w-2xl mb-10">A plataforma de gestão escolar definitiva, desenvolvida com a realidade das nossas instituições em mente.</p>
+                        <div class="flex gap-4">
+                            <button onclick="showTab('licencas')" class="bg-[#f97316] text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition-all flex items-center gap-2">
+                                Solicitar Demonstração <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 2 -->
+                <div class="carousel-item absolute inset-0">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#11392e] via-[#11392e]/80 to-transparent z-10"></div>
+                    <img src="https://picsum.photos/seed/angola2/1200/600" alt="Banner" class="w-full h-full object-cover opacity-40">
+                    <div class="relative z-20 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
+                        <span class="text-[#f97316] font-black text-lg md:text-2xl mb-2">Soberania de Dados</span>
+                        <h1 class="text-white text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-tight">HOSPEDADO EM ANGOLA</h1>
+                        <p class="text-slate-300 text-lg md:text-xl max-w-2xl mb-10">Seus dados privados nunca saem do país. Segurança e conformidade com as leis locais.</p>
+                        <div class="flex gap-4">
+                            <button onclick="showTab('licencas')" class="bg-[#f97316] text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition-all flex items-center gap-2">
+                                Solicitar Demonstração <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Slide 3 -->
+                <div class="carousel-item absolute inset-0">
+                    <div class="absolute inset-0 bg-gradient-to-r from-[#11392e] via-[#11392e]/80 to-transparent z-10"></div>
+                    <img src="https://picsum.photos/seed/angola3/1200/600" alt="Banner" class="w-full h-full object-cover opacity-40">
+                    <div class="relative z-20 max-w-7xl mx-auto px-4 h-full flex flex-col justify-center">
+                        <span class="text-[#f97316] font-black text-lg md:text-2xl mb-2">Educação do Futuro</span>
+                        <h1 class="text-white text-5xl md:text-7xl font-black tracking-tighter mb-6 leading-tight">TECNOLOGIA DE PONTA</h1>
+                        <p class="text-slate-300 text-lg md:text-xl max-w-2xl mb-10">Transforme a gestão da sua escola com ferramentas modernas e intuitivas.</p>
+                        <div class="flex gap-4">
+                            <button onclick="showTab('licencas')" class="bg-[#f97316] text-white px-8 py-4 rounded-full font-bold hover:bg-orange-600 transition-all flex items-center gap-2">
+                                Solicitar Demonstração <i data-lucide="arrow-right" class="w-5 h-5"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="absolute bottom-10 left-1/2 -translate-x-1/2 z-30 flex gap-2" id="carousel-dots">
+                <button onclick="setSlide(0)" class="dot w-8 h-3 rounded-full bg-[#f97316] transition-all"></button>
+                <button onclick="setSlide(1)" class="dot w-3 h-3 rounded-full bg-white/30 transition-all"></button>
+                <button onclick="setSlide(2)" class="dot w-3 h-3 rounded-full bg-white/30 transition-all"></button>
+            </div>
+        </section>
+    </div>
+
+    <!-- SOBRE SECTION (Common to Inicio and Sobre) -->
+    <section id="sobre-section" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-[#11392e] mb-4">Por que escolher o Kulonga?</h2>
+                <p class="text-slate-600 max-w-2xl mx-auto mb-8">Tecnologia angolana desenhada para elevar o padrão da educação nacional.</p>
+                
+                <div class="bg-white p-8 rounded-[40px] shadow-xl border border-slate-100 max-w-4xl mx-auto text-left relative overflow-hidden">
+                    <div class="absolute top-0 right-0 w-32 h-32 bg-[#f97316]/5 rounded-full -mr-16 -mt-16"></div>
+                    <div class="relative z-10">
+                        <h4 class="text-[#f97316] font-black uppercase tracking-widest text-sm mb-4">Resumo Executivo</h4>
+                        <p class="text-slate-700 text-lg leading-relaxed font-medium">
+                            O Kulonga é a primeira plataforma de gestão escolar 360º desenvolvida em Angola, focada na <span class="text-[#11392e] font-bold">soberania de dados</span> e <span class="text-[#11392e] font-bold">conformidade fiscal (SAF-T AO)</span>. 
+                            Oferecemos uma solução completa que integra gestão acadêmica, financeira e administrativa, permitindo que as instituições foquem no que realmente importa: a educação de excelência.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                    <div class="bg-blue-50 w-16 h-16 rounded-2xl flex items-center justify-center text-[#1e3a8a] mb-6 group-hover:bg-[#1e3a8a] group-hover:text-white transition-all">
+                        <i data-lucide="shield-check" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Dados em Angola</h3>
+                    <p class="text-slate-600 leading-relaxed">Hospedagem 100% nacional. Seus dados privados nunca saem do país, garantindo total soberania e segurança.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                    <div class="bg-green-50 w-16 h-16 rounded-2xl flex items-center justify-center text-[#11392e] mb-6 group-hover:bg-[#11392e] group-hover:text-white transition-all">
+                        <i data-lucide="zap" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Performance Impactante</h3>
+                    <p class="text-slate-600 leading-relaxed">Sistema otimizado para as condições de conectividade locais, garantindo fluidez mesmo em situações de baixo sinal.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group">
+                    <div class="bg-orange-50 w-16 h-16 rounded-2xl flex items-center justify-center text-[#f97316] mb-6 group-hover:bg-[#f97316] group-hover:text-white transition-all">
+                        <i data-lucide="users" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Suporte Local</h3>
+                    <p class="text-slate-600 leading-relaxed">Equipe técnica em Luanda pronta para atender sua instituição presencialmente ou via canais digitais.</p>
+                </div>
+
+                <div class="bg-white p-8 rounded-3xl shadow-sm border border-slate-100 hover:shadow-xl transition-all group md:col-span-3 lg:col-span-1">
+                    <div class="bg-indigo-50 w-16 h-16 rounded-2xl flex items-center justify-center text-indigo-600 mb-6 group-hover:bg-indigo-600 group-hover:text-white transition-all">
+                        <i data-lucide="lock" class="w-8 h-8"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4">Segurança de Elite</h3>
+                    <p class="text-slate-600 leading-relaxed">Proteção avançada com MFA, políticas de senha rigorosas e sessões seguras. Seus dados protegidos por padrões internacionais.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schools Carousel -->
+    <section class="py-16 overflow-hidden bg-white">
+        <div class="max-w-7xl mx-auto px-4 mb-10">
+            <h3 class="text-center text-sm font-bold uppercase tracking-widest text-slate-400">Instituições que confiam no Kulonga</h3>
+        </div>
+        <div class="flex gap-12 animate-marquee whitespace-nowrap">
+            <!-- Logos repeated for marquee effect -->
+            <div class="flex flex-col items-center gap-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <img src="https://picsum.photos/seed/logo1/100/100" alt="Escola Central" class="w-20 h-20 rounded-2xl shadow-sm blur-[1px] hover:blur-0 transition-all">
+                <span class="text-xs font-bold text-slate-500">Escola Central</span>
+            </div>
+            <div class="flex flex-col items-center gap-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <img src="https://picsum.photos/seed/logo2/100/100" alt="Colégio Avançado" class="w-20 h-20 rounded-2xl shadow-sm blur-[1px] hover:blur-0 transition-all">
+                <span class="text-xs font-bold text-slate-500">Colégio Avançado</span>
+            </div>
+            <div class="flex flex-col items-center gap-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <img src="https://picsum.photos/seed/logo3/100/100" alt="Instituto Moderno" class="w-20 h-20 rounded-2xl shadow-sm blur-[1px] hover:blur-0 transition-all">
+                <span class="text-xs font-bold text-slate-500">Instituto Moderno</span>
+            </div>
+            <!-- Repeat for seamless loop -->
+            <div class="flex flex-col items-center gap-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <img src="https://picsum.photos/seed/logo1/100/100" alt="Escola Central" class="w-20 h-20 rounded-2xl shadow-sm blur-[1px] hover:blur-0 transition-all">
+                <span class="text-xs font-bold text-slate-500">Escola Central</span>
+            </div>
+            <div class="flex flex-col items-center gap-4 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all cursor-pointer">
+                <img src="https://picsum.photos/seed/logo2/100/100" alt="Colégio Avançado" class="w-20 h-20 rounded-2xl shadow-sm blur-[1px] hover:blur-0 transition-all">
+                <span class="text-xs font-bold text-slate-500">Colégio Avançado</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- LICENCAS SECTION -->
+    <section id="licencas-section" class="py-24 bg-slate-900 text-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black mb-4">Modelos de Licenciamento</h2>
+                <p class="text-slate-400">Escolha o plano que melhor se adapta à sua realidade.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Per Student -->
+                <div class="bg-white/5 border border-white/10 p-8 rounded-3xl hover:bg-white/10 transition-all">
+                    <div class="text-[#f97316] mb-6"><i data-lucide="user-plus" class="w-10 h-10"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">Por Aluno</h3>
+                    <p class="text-slate-400 mb-6">Ideal para escolas em crescimento. Pague apenas pelo que usa.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> Gestão Acadêmica Completa</li>
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> Portal do Aluno e Encarregado</li>
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> App Mobile</li>
+                    </ul>
+                    <button onclick="showTab('contactos')" class="w-full py-3 rounded-xl border border-white/20 font-bold hover:bg-white hover:text-slate-900 transition-all">Solicitar Cotação</button>
+                </div>
+
+                <!-- Institution -->
+                <div class="bg-[#1e3a8a] p-8 rounded-3xl shadow-2xl md:scale-105 border border-blue-400/30">
+                    <div class="text-orange-400 mb-6"><i data-lucide="building-2" class="w-10 h-10"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">Institucional</h3>
+                    <p class="text-blue-100 mb-6">Licença única para toda a instituição, sem limite de alunos.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-orange-400"></i> Módulo Financeiro Avançado</li>
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-orange-400"></i> Gestão de RH e Professores</li>
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-orange-400"></i> Relatórios de Gestão</li>
+                    </ul>
+                    <button onclick="showTab('contactos')" class="w-full py-3 rounded-xl bg-[#f97316] text-white font-bold hover:bg-orange-600 transition-all">Plano Recomendado</button>
+                </div>
+
+                <!-- Modular / Hybrid -->
+                <div class="bg-white/5 border border-white/10 p-8 rounded-3xl hover:bg-white/10 transition-all">
+                    <div class="text-green-400 mb-6"><i data-lucide="layers" class="w-10 h-10"></i></div>
+                    <h3 class="text-2xl font-bold mb-2">Híbrida / Modular</h3>
+                    <p class="text-slate-400 mb-6">Personalize sua experiência ativando apenas os módulos necessários.</p>
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> Escolha seus Módulos</li>
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> Integração com Sistemas Legados</li>
+                        <li class="flex items-center gap-2 text-sm"><i data-lucide="check-circle-2" class="w-4 h-4 text-green-500"></i> API para Desenvolvedores</li>
+                    </ul>
+                    <button onclick="showTab('contactos')" class="w-full py-3 rounded-xl border border-white/20 font-bold hover:bg-white hover:text-slate-900 transition-all">Personalizar</button>
+                </div>
+            </div>
+
+            <div class="mt-16 bg-[#11392e] p-8 rounded-3xl flex flex-col md:flex-row items-center justify-between gap-8">
+                <div>
+                    <h4 class="text-2xl font-bold mb-2">Freemium + Premium</h4>
+                    <p class="text-slate-300">Comece grátis com funcionalidades básicas e evolua conforme sua necessidade.</p>
+                </div>
+                <button onclick="showTab('contactos')" class="bg-white text-[#11392e] px-8 py-4 rounded-full font-bold hover:bg-slate-100 transition-all">Saber Mais</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feedback Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-[#11392e] mb-4">O que dizem nossos parceiros</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="bg-slate-50 p-10 rounded-[40px] relative">
+                    <div class="absolute -top-6 left-10 bg-[#f97316] p-4 rounded-2xl text-white shadow-lg">
+                        <i data-lucide="message-square" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-lg italic text-slate-700 mb-8 leading-relaxed">
+                        "O Kulonga revolucionou a forma como gerimos as propinas. A transparência e o controle financeiro que ganhamos não tem preço."
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://picsum.photos/seed/person1/60/60" alt="User" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h5 class="font-bold">Dr. António Manuel</h5>
+                            <p class="text-xs text-slate-500">Diretor Geral - Colégio Esperança</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-10 rounded-[40px] relative">
+                    <div class="absolute -top-6 left-10 bg-[#1e3a8a] p-4 rounded-2xl text-white shadow-lg">
+                        <i data-lucide="message-square" class="w-8 h-8"></i>
+                    </div>
+                    <p class="text-lg italic text-slate-700 mb-8 leading-relaxed">
+                        "A facilidade de acesso às notas pelos encarregados reduziu drasticamente o fluxo de pessoas na secretaria. Excelente ferramenta!"
+                    </p>
+                    <div class="flex items-center gap-4">
+                        <img src="https://picsum.photos/seed/person2/60/60" alt="User" class="w-12 h-12 rounded-full">
+                        <div>
+                            <h5 class="font-bold">Eng. Maria Teresa</h5>
+                            <p class="text-xs text-slate-500">Coordenadora Pedagógica - Instituto Moderno</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partners Section -->
+    <section class="py-16 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-12">
+                <div class="max-w-md">
+                    <div class="flex items-center gap-2 text-[#1e3a8a] mb-4">
+                        <i data-lucide="handshake" class="w-6 h-6"></i>
+                        <span class="font-bold uppercase tracking-widest text-sm">Parceiros Estratégicos</span>
+                    </div>
+                    <h3 class="text-3xl font-black text-[#11392e] mb-4">Ecossistema Kulonga</h3>
+                    <p class="text-slate-600">Trabalhamos em conjunto com as maiores empresas e instituições de Angola para entregar o melhor serviço.</p>
+                </div>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/partner1/100/100" alt="Partner" class="h-12 object-contain">
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/partner2/100/100" alt="Partner" class="h-12 object-contain">
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/partner3/100/100" alt="Partner" class="h-12 object-contain">
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl shadow-sm flex items-center justify-center grayscale hover:grayscale-0 transition-all">
+                        <img src="https://picsum.photos/seed/partner4/100/100" alt="Partner" class="h-12 object-contain">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Creators Section -->
+    <section class="py-24 bg-white">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h2 class="text-4xl font-black text-[#11392e] mb-4">Criadores do Projecto</h2>
+                <p class="text-slate-600">Uma equipa dedicada à transformação digital da educação em Angola.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+                <div class="text-center group">
+                    <div class="relative mb-6 inline-block">
+                        <div class="absolute inset-0 bg-[#f97316] rounded-[40px] rotate-6 group-hover:rotate-0 transition-all"></div>
+                        <img src="https://picsum.photos/seed/ben/300/300" alt="Benilson Salvador" class="relative w-64 h-64 object-cover rounded-[40px] shadow-xl">
+                    </div>
+                    <h4 class="text-xl font-bold text-[#11392e]">Benilson Salvador</h4>
+                    <p class="text-slate-500">CEO & Lead Architect</p>
+                </div>
+                <div class="text-center group">
+                    <div class="relative mb-6 inline-block">
+                        <div class="absolute inset-0 bg-[#f97316] rounded-[40px] rotate-6 group-hover:rotate-0 transition-all"></div>
+                        <img src="https://picsum.photos/seed/tech/300/300" alt="Equipa Técnica" class="relative w-64 h-64 object-cover rounded-[40px] shadow-xl">
+                    </div>
+                    <h4 class="text-xl font-bold text-[#11392e]">Equipa Técnica</h4>
+                    <p class="text-slate-500">Desenvolvimento & Infraestrutura</p>
+                </div>
+                <div class="text-center group">
+                    <div class="relative mb-6 inline-block">
+                        <div class="absolute inset-0 bg-[#f97316] rounded-[40px] rotate-6 group-hover:rotate-0 transition-all"></div>
+                        <img src="https://picsum.photos/seed/support/300/300" alt="Equipa de Suporte" class="relative w-64 h-64 object-cover rounded-[40px] shadow-xl">
+                    </div>
+                    <h4 class="text-xl font-bold text-[#11392e]">Equipa de Suporte</h4>
+                    <p class="text-slate-500">Atendimento & Implementação</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CONTACTOS SECTION -->
+    <section id="contactos-section" class="py-24 bg-slate-50">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+                <div>
+                    <h2 class="text-4xl font-black text-[#11392e] mb-8">Vamos conversar?</h2>
+                    <p class="text-slate-600 mb-12 text-lg">
+                        Solicite uma demonstração personalizada para sua instituição. Nosso superadmin entrará em contacto para agendar uma reunião.
+                    </p>
+
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white p-4 rounded-2xl shadow-sm text-[#1e3a8a]">
+                                <i data-lucide="mail" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase">E-mail</p>
+                                <p class="font-bold">comercial@kulonga.ao</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white p-4 rounded-2xl shadow-sm text-[#f97316]">
+                                <i data-lucide="phone" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase">Linha de Apoio</p>
+                                <p class="font-bold">+244 923 000 000</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="bg-white p-4 rounded-2xl shadow-sm text-[#11392e]">
+                                <i data-lucide="map-pin" class="w-6 h-6"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs font-bold text-slate-400 uppercase">Escritório</p>
+                                <p class="font-bold">Talatona, Luanda - Angola</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-white p-8 md:p-12 rounded-[40px] shadow-2xl border border-slate-100">
+                    <form id="requestForm" class="space-y-6">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-slate-700">Seu Nome</label>
+                                <input type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1e3a8a]">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-slate-700">Instituição</label>
+                                <input type="text" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1e3a8a]">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-slate-700">E-mail</label>
+                                <input type="email" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1e3a8a]">
+                            </div>
+                            <div class="space-y-2">
+                                <label class="text-sm font-bold text-slate-700">Telefone</label>
+                                <input type="tel" required class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1e3a8a]">
+                            </div>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-slate-700">Tipo de Licença</label>
+                            <select class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1e3a8a]">
+                                <option value="student">Por Aluno</option>
+                                <option value="institution">Institucional</option>
+                                <option value="hybrid">Híbrida</option>
+                                <option value="modular">Modular</option>
+                                <option value="freemium">Freemium</option>
+                                <option value="premium">Premium</option>
+                            </select>
+                        </div>
+                        <div class="space-y-2">
+                            <label class="text-sm font-bold text-slate-700">Mensagem (Opcional)</label>
+                            <textarea class="w-full bg-slate-50 border border-slate-200 rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-[#1e3a8a] h-32"></textarea>
+                        </div>
+                        <button type="submit" class="w-full bg-[#11392e] text-white py-4 rounded-2xl font-bold hover:bg-black transition-all shadow-xl">
+                            Solicitar Demonstração
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-[#11392e] text-white py-12 border-t border-white/10">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <div class="flex items-center justify-center gap-2 mb-6">
+                <div class="bg-white p-1.5 rounded-lg">
+                    <i data-lucide="graduation-cap" class="text-[#11392e] w-5 h-5"></i>
+                </div>
+                <span class="text-xl font-black tracking-tighter">kulonga</span>
+            </div>
+            <p class="text-slate-400 text-sm mb-8">© 2026 Kulonga Platform. Todos os direitos reservados. Feito com ❤️ em Angola.</p>
+            <div class="flex justify-center gap-6">
+                <a href="#" class="text-slate-400 hover:text-white transition-colors">Termos de Uso</a>
+                <a href="#" class="text-slate-400 hover:text-white transition-colors">Privacidade</a>
+                <a href="#" class="text-slate-400 hover:text-white transition-colors">Cookies</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Carousel Logic
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.carousel-item');
+        const dots = document.querySelectorAll('.dot');
+
+        function setSlide(index) {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('bg-[#f97316]', 'w-8');
+            dots[currentSlide].classList.add('bg-white/30', 'w-3');
+            
+            currentSlide = index;
+            
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.remove('bg-white/30', 'w-3');
+            dots[currentSlide].classList.add('bg-[#f97316]', 'w-8');
+        }
+
+        setInterval(() => {
+            let next = (currentSlide + 1) % slides.length;
+            setSlide(next);
+        }, 5000);
+
+        // Tab Logic
+        function showTab(tabId) {
+            // Update nav links
+            document.querySelectorAll('.nav-link').forEach(link => {
+                link.classList.remove('text-[#f97316]');
+                link.classList.add('text-slate-600');
+                if(link.getAttribute('data-tab') === tabId) {
+                    link.classList.add('text-[#f97316]');
+                    link.classList.remove('text-slate-600');
+                }
+            });
+
+            // Show/Hide sections
+            if (tabId === 'inicio') {
+                document.getElementById('tab-inicio').classList.add('active');
+                document.getElementById('sobre-section').classList.remove('hidden');
+                document.getElementById('licencas-section').classList.remove('hidden');
+                document.getElementById('contactos-section').classList.remove('hidden');
+            } else if (tabId === 'sobre') {
+                document.getElementById('tab-inicio').classList.remove('active');
+                document.getElementById('sobre-section').classList.remove('hidden');
+                document.getElementById('licencas-section').classList.add('hidden');
+                document.getElementById('contactos-section').classList.add('hidden');
+            } else if (tabId === 'licencas') {
+                document.getElementById('tab-inicio').classList.remove('active');
+                document.getElementById('sobre-section').classList.add('hidden');
+                document.getElementById('licencas-section').classList.remove('hidden');
+                document.getElementById('contactos-section').classList.add('hidden');
+            } else if (tabId === 'contactos') {
+                document.getElementById('tab-inicio').classList.remove('active');
+                document.getElementById('sobre-section').classList.add('hidden');
+                document.getElementById('licencas-section').classList.add('hidden');
+                document.getElementById('contactos-section').classList.remove('hidden');
+            }
+            
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Mobile Menu Logic
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+        document.getElementById('mobile-menu-btn').addEventListener('click', toggleMobileMenu);
+
+        // Form Submission
+        document.getElementById('requestForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            alert('Obrigado pelo seu interesse! Esta é uma versão estática. No sistema real, seu pedido seria enviado ao Superadmin.');
+        });
+    </script>
+</body>
+</html>

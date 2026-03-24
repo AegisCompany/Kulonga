@@ -1,7 +1,10 @@
 import express from "express";
 import { createServer as createViteServer } from "vite";
 import path from "path";
+import { fileURLToPath } from "url";
+import { rateLimit } from "express-rate-limit";
 import db from "./server/db.ts";
+import { authenticate, authorize } from "./server/utils/authMiddleware.ts";
 
 // Import Services
 import authService from "./server/services/authService.ts";
@@ -13,16 +16,57 @@ import paymentService from "./server/services/paymentService.ts";
 import schoolService from "./server/services/schoolService.ts";
 import licenseService from "./server/services/licenseService.ts";
 import teacherService from "./server/services/teacherService.ts";
+import studentService from "./server/services/studentService.ts";
 import saftService from "./server/services/saftService.ts";
+import dataService from "./server/services/dataService.ts";
 import migrationService from "./server/services/migrationService.ts";
+import certificationService from "./server/services/certificationService.ts";
+import externalService from "./server/services/externalService.ts";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 const PORT = 3000;
 
-app.set('trust proxy', 1);
-app.use(express.json());
+// --- API Gateway Configurations ---
 
-// Multi-tenancy Middleware (Gateway Logic)
+// 1. Trust Proxy (Important for Rate Limiting behind proxies)
+app.set('trust proxy', 1);
+
+// 2. Body Parsers
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+
+// 3. Request Logger
+app.use((req, res, next) => {
+  const start = Date.now();
+  res.on('finish', () => {
+    const duration = Date.now() - start;
+    console.log(`[Gateway] ${req.method} ${req.originalUrl} - ${res.statusCode} (${duration}ms)`);
+  });
+  next();
+});
+
+// 4. Rate Limiting
+const generalLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  limit: 1000, // Increased limit for dashboard usage
+  standardHeaders: 'draft-7',
+  legacyHeaders: false,
+  message: { error: "Muitas requisições. Por favor, tente novamente mais tarde." }
+});
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  limit: 100, // Increased for development/testing
+  message: { error: "Muitas tentativas de login. Por favor, tente novamente em 15 minutos." }
+});
+
+// Apply general rate limiting to all API routes
+app.use("/api", generalLimiter);
+
+// 5. Multi-tenancy Middleware (Gateway Logic)
 app.use((req, res, next) => {
   const host = req.headers.host || "";
   let subdomain = "";
@@ -46,18 +90,31 @@ app.use((req, res, next) => {
   next();
 });
 
-// API Gateway Routing
-app.use("/api/auth", authService);
+// --- API Gateway Routing ---
+
+// Health Check
+app.get("/api/health", (req, res) => {
+  res.json({ status: "UP", timestamp: new Date().toISOString(), gateway: "Kulonga API Gateway" });
+});
+
+// Auth Service (with stricter rate limiting)
+app.use("/api/auth", authLimiter, authService);
+
+// Core Services
 app.use("/api/academic", academicService);
+app.use("/api/students", studentService);
+app.use("/api/teachers", teacherService);
 app.use("/api/financial", financialService);
-app.use("/api/notifications", notificationService);
-app.use("/api/superadmin", superAdminService);
 app.use("/api/payments", paymentService);
+app.use("/api/notifications", notificationService);
 app.use("/api/school", schoolService);
 app.use("/api/license", licenseService);
-app.use("/api/teachers", teacherService);
 app.use("/api/saft", saftService);
+app.use("/api/data", dataService);
 app.use("/api/migration", migrationService);
+app.use("/api/certification", certificationService);
+app.use("/api/external", externalService);
+app.use("/api/superadmin", superAdminService);
 
 // Service Requests API
 app.post("/api/service-requests", (req, res) => {
@@ -71,7 +128,7 @@ app.post("/api/service-requests", (req, res) => {
   }
 });
 
-app.get("/api/superadmin/service-requests", (req, res) => {
+app.get("/api/superadmin/service-requests", authenticate, authorize(['superadmin']), (req, res) => {
   const requests = db.prepare("SELECT * FROM service_requests ORDER BY created_at DESC").all();
   res.json(requests);
 });
@@ -97,24 +154,42 @@ app.get("/api/stats", (req, res) => {
   });
 });
 
+// --- Gateway Error Handling ---
+app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {
+  console.error("[Gateway Error]", err);
+  const status = err.status || 500;
+  res.status(status).json({
+    error: "Erro interno no Gateway",
+    message: process.env.NODE_ENV === 'production' ? "Ocorreu um erro inesperado." : err.message
+  });
+});
+
 // Vite Integration
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
+      root: path.join(__dirname, ".."),
     });
     app.use(vite.middlewares);
   } else {
-    app.use(express.static(path.join(__dirname, "dist")));
+    const distPath = path.join(process.cwd(), "dist");
+    app.use(express.static(distPath));
     app.get("*", (req, res) => {
-      res.sendFile(path.join(__dirname, "dist", "index.html"));
+      res.sendFile(path.join(distPath, "index.html"));
     });
   }
 
   app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
+    console.log(`[Server] Kulonga Platform Gateway started on port ${PORT}`);
+    console.log(`[Server] Environment: ${process.env.NODE_ENV || 'development'}`);
+    console.log(`[Server] Database: school.db`);
   });
 }
 
-startServer();
+console.log("[Server] Starting Kulonga Platform Gateway...");
+startServer().catch(err => {
+  console.error("[Server] Critical failure during startup:", err);
+  process.exit(1);
+});
